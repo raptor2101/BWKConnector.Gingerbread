@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.raptor2101.BattleWorldsKronos.Connector.Gui"
+    android:versionCode="1000"
+    android:versionName="0.1.0 (Gingerbread)" >
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="19" />
+	
+	<uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" android:name="de.raptor2101.BattleWorldsKronos.Connector.ConnectorApp">
+        <activity android:name="de.raptor2101.BattleWorldsKronos.Connector.Gui.Activities.GameListingActivity" android:theme="@style/AdvancedTitleTheme" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="de.raptor2101.BattleWorldsKronos.Connector.Gui.Activities.SettingsActivity" android:theme="@style/AdvancedTitleTheme"></activity>
+        <service android:name="de.raptor2101.BattleWorldsKronos.Connector.NotificationService"></service>
+    </application>
+</manifest>
