@@ -2,7 +2,6 @@ package de.raptor2101.BattleWorldsKronos.Connector.Gui.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.http.AndroidHttpClient;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Menu;
@@ -17,16 +16,14 @@ import de.raptor2101.BattleWorldsKronos.Connector.ApplicationSettings;
 import de.raptor2101.BattleWorldsKronos.Connector.NotificationService;
 import de.raptor2101.BattleWorldsKronos.Connector.Gui.NavigationButtonAdapter;
 import de.raptor2101.BattleWorldsKronos.Connector.Gui.R;
-import de.raptor2101.BattleWorldsKronos.Connector.JSON.GameListing;
-import de.raptor2101.BattleWorldsKronos.Connector.Task.GameListingLoaderTask;
-import de.raptor2101.BattleWorldsKronos.Connector.Task.GameListingLoaderTask.ResultListener;
+import de.raptor2101.BattleWorldsKronos.Connector.Task.GamesLoaderTask;
 import de.raptor2101.BattleWorldsKronos.Connector.ConnectorApp;
-import de.raptor2101.BattleWorldsKronos.Connector.Gui.GameInfoAdapater;
-import de.raptor2101.BattleWorldsKronos.Connector.Gui.Controls.GameInfoView;
+import de.raptor2101.BattleWorldsKronos.Connector.Gui.GameViewAdapater;
+import de.raptor2101.BattleWorldsKronos.Connector.Gui.Controls.GameView;
 
-public class GameListingActivity extends Activity implements ResultListener, OnItemClickListener {
-  private GameInfoAdapater mAdapter = new GameInfoAdapater(this);
-  private GameInfoView mExpandedView;
+public class GameListingActivity extends Activity implements GamesLoaderTask.ResultListener, OnItemClickListener {
+  private GameViewAdapater mAdapter = new GameViewAdapater(this);
+  private GameView mExpandedView;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -48,26 +45,22 @@ public class GameListingActivity extends Activity implements ResultListener, OnI
   protected void onResume() {
     super.onResume();
     ApplicationSettings settings = new ApplicationSettings(this);
-    ConnectorApp app = (ConnectorApp) getApplication();
     
     if(settings.getEmail().equals(ApplicationSettings.EmptyResult)){
       startSettingsActivity();
       return;
     }
     
-    
-    if(app.getTimestampResultStored() == 0 || SystemClock.elapsedRealtime()-app.getTimestampResultStored()>settings.getRefreshCylce()){
-      loadGameInfos();
-    } else {
-      handleResult(app.getResult());
-    }
+    ConnectorApp app = (ConnectorApp) getApplication();
+    long lastLoad = app.getDatabase().getLastPersistTimestamp();
+    loadGames(SystemClock.elapsedRealtime()-lastLoad>settings.getRefreshCylce());
   }
 
-  private void loadGameInfos() {
+  private void loadGames(boolean forceReload) {
     ApplicationSettings settings = new ApplicationSettings(this);
+    GamesLoaderTask task = new GamesLoaderTask(this, settings.getEmail(), settings.getPassword(), this);
     
-    GameListingLoaderTask task = new GameListingLoaderTask(AndroidHttpClient.newInstance((String) getText(R.string.app_name)), settings.getEmail(), settings.getPassword(), this);
-    task.execute(new Void[0]);
+    task.execute(new Boolean[]{forceReload});
     ProgressBar progressBar = (ProgressBar) findViewById(R.id.advanced_title_progress_bar);
     progressBar.setVisibility(View.VISIBLE);
   }
@@ -84,7 +77,7 @@ public class GameListingActivity extends Activity implements ResultListener, OnI
     if(item.getItemId() == R.id.action_settings){
       startSettingsActivity();
     } else if(item.getItemId() == R.id.action_refresh){
-      loadGameInfos();
+      loadGames(true);
     }
     return super.onMenuItemSelected(featureId, item);
   }
@@ -95,21 +88,19 @@ public class GameListingActivity extends Activity implements ResultListener, OnI
   }
   
   @Override
-  public void handleResult(GameListing result) {
+  public void handleResult(GamesLoaderTask.Result result) {
     ProgressBar progressBar = (ProgressBar) findViewById(R.id.advanced_title_progress_bar);
     progressBar.setVisibility(View.GONE);
     
     if(result != null){
-      mAdapter.setGameInfos(result.getMyGames());
-      ConnectorApp app = (ConnectorApp) getApplication();
-      app.storeResult(result);
+      mAdapter.setGames(result.getGames());
       NotificationService.reset(this);
     }
   }
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    GameInfoView gameInfoView = (GameInfoView) view;
+    GameView gameInfoView = (GameView) view;
     if(gameInfoView.isExpanded()){
       gameInfoView.collapse();
       mExpandedView = null;
