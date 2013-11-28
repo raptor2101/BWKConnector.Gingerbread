@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.raptor2101.BattleWorldsKronos.Connector.Gui"
-    android:versionCode="1004"
-    android:versionName="0.1.1 (Gingerbread)" >
+    android:versionCode="1005"
+    android:versionName="0.1.2 (Gingerbread)" >
 
     <uses-sdk
         android:minSdkVersion="10"
