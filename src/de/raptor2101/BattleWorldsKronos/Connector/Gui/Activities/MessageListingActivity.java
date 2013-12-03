@@ -1,6 +1,8 @@
 package de.raptor2101.BattleWorldsKronos.Connector.Gui.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,5 +22,17 @@ public class MessageListingActivity extends AbstractMessageListingActivity{
   @Override
   protected ProgressBar GetProgressBar() {
     return (ProgressBar) findViewById(R.id.advanced_title_bar_progress_bar);
+  }
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu){
+    getMenuInflater().inflate(R.menu.menu_messages, menu);
+    return true;
+  }
+
+  @Override
+  protected void startWriteMessageActivity() {
+    Intent intent = new Intent(this, WriteMessageActivity.class);
+    startActivity(intent);
   }
 }
