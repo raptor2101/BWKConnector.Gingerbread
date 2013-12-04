@@ -20,7 +20,7 @@ public class MessageListingActivity extends AbstractMessageListingActivity{
   }  
 
   @Override
-  protected ProgressBar GetProgressBar() {
+  protected ProgressBar getProgressBar() {
     return (ProgressBar) findViewById(R.id.advanced_title_bar_progress_bar);
   }
   
