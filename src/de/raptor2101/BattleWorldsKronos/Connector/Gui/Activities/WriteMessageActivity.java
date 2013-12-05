@@ -8,6 +8,8 @@ import android.widget.TextView;
 import de.raptor2101.BattleWorldsKronos.Connector.Gui.R;
 
 public class WriteMessageActivity extends AbstractWriteMessageActivity {
+  
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -16,6 +18,10 @@ public class WriteMessageActivity extends AbstractWriteMessageActivity {
     
     TextView textView = (TextView) findViewById(R.id.advanced_title_bar_title);
     textView.setText(this.getTitle());
+    
+    
+    
+    
   }
   
   @Override

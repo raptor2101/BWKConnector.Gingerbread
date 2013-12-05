@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import de.raptor2101.BattleWorldsKronos.Connector.Data.Entities.Message;
 import de.raptor2101.BattleWorldsKronos.Connector.Gui.R;
 
 public class MessageListingActivity extends AbstractMessageListingActivity{
@@ -31,8 +32,9 @@ public class MessageListingActivity extends AbstractMessageListingActivity{
   }
 
   @Override
-  protected void startWriteMessageActivity() {
+  protected void startWriteMessageActivity(Message message) {
     Intent intent = new Intent(this, WriteMessageActivity.class);
+    intent.putExtra(WriteMessageActivity.INTENT_EXTRA_MESSAGE_RESPOND_TO, message);
     startActivity(intent);
   }
 }
