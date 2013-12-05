@@ -3,6 +3,7 @@ package de.raptor2101.BattleWorldsKronos.Connector.Gui.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,5 +37,10 @@ public class MessageListingActivity extends AbstractMessageListingActivity{
     Intent intent = new Intent(this, WriteMessageActivity.class);
     intent.putExtra(WriteMessageActivity.INTENT_EXTRA_MESSAGE_RESPOND_TO, message);
     startActivity(intent);
+  }
+  
+  @Override
+  protected View getTitleImageButton() {
+    return findViewById(R.id.advanced_title_bar_button);
   }
 }

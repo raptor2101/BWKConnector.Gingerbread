@@ -2,16 +2,15 @@ package de.raptor2101.BattleWorldsKronos.Connector.Gui.Activities;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import de.raptor2101.BattleWorldsKronos.Connector.Gui.R;
 
-public class GameListingActivity extends AbstractGameListingActivity implements OnItemClickListener{
+public class GameListingActivity extends AbstractGameListingActivity{
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    
     requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     super.onCreate(savedInstanceState);
     getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.advanced_title_bar);
@@ -25,9 +24,16 @@ public class GameListingActivity extends AbstractGameListingActivity implements 
     return (ProgressBar) findViewById(R.id.advanced_title_bar_progress_bar);
   }
   
+  
+  
   @Override
   public boolean onCreateOptionsMenu(Menu menu){
     getMenuInflater().inflate(R.menu.menu, menu);
     return true;
+  }
+
+  @Override
+  protected View getTitleImageButton() {
+    return findViewById(R.id.advanced_title_bar_button);
   }
 }
